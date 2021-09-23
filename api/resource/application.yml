@@ -1,0 +1,76 @@
+print-status: False
+api:
+    name: HealthCheckManagerApi
+    extension: yml
+    dependency:
+        update: False
+        list:
+            web: [Popen,Path]
+            local: []
+    list: [globals]
+    language: EN-US
+    git:
+        url: https://github.com/SamuelJansen/
+        extension: git
+
+    security:
+        secret: default
+    server:
+        scheme: https
+        host: 0.0.0.0
+        port: 5000
+        base-url: /health-check-manager-api
+    scheduler:
+        enable: True
+    # database:
+        # dialect: ${DATABASE_DIALECT:}
+        # driver: ${DATABASE_DRIVER:}
+        # database: ${DATABASE_NAME:}
+        # username: ${DATABASE_USERNAME:}
+        # password: ${DATABASE_PASSWORD:}
+        # host: ${DATABASE_HOST:}
+        # port: ${DATABASE_PORT:}
+        # schema: ${DATABASE_SCHEMA:}
+
+health-check:
+    sheduler:
+        health-check:
+            time-in-minutes: 2
+            client:
+                timeout-in-seconds: 2
+
+speech-api:
+    base-url: http://192.168.25.2:5000/riachuelo-automating-api
+
+riachuelo-automating-api:
+    base-url: http://192.168.25.2:5000/riachuelo-automating-api
+
+ngrok-manager-api:
+    base-url: http://192.168.25.2:5041/ngrok-manager-api
+
+idealizar:
+    agenda-api:
+        base-url: https://idealizar.glitch.me/dev-idealizar-agenda-api
+    whats-app:
+        web-api:
+            base-url: http://192.168.25.2:5100/idealizar-whats-app-web-api
+        manager-api:
+            base-url: http://192.168.25.3:5500/idealizar-whats-app-manager-api
+
+swagger:
+    host: ${api.server.host}:${api.server.port}
+    schemes: [${api.server.scheme}]
+    info:
+        title: {api.name}
+        version: 0.0.1
+        description: Health Check Manager Api
+        terms-of-service: http://swagger.io/terms/
+        contact:
+            name: Samuel Jansen
+            email: samuel.jansenn@gmail.com
+        license:
+            name: Apache 2.0 / MIT License
+            url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+python:
+    version: 3.9

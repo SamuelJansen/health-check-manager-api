@@ -16,7 +16,7 @@ class HealthCheckService :
                 response = self.client.healthCheck.checkHealth(api.host)
             except Exception as exception:
                 response = {'status':'DOWN', 'message': exception.message, 'logMessage': exception.logMessage}
-                self.service.voice.speak([f'{api.name} {api.environment.enumName.lower()} api is down{c.DOT_SPACE_CAUSE} {exception.message if exception.status < 500 else exception.logMessage}'])
+                self.service.voice.speakAll([f'{api.name} {api.environment.enumName.lower()} api is down{c.DOT_SPACE_CAUSE} {exception.message if exception.status < 500 else exception.logMessage}'])
             reponseDictionary[f'{api.key}{c.COLON}{api.name}{c.COLON}{api.type}'] = response
         log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.INFO)
         return reponseDictionary

@@ -1,6 +1,58 @@
 {
     "swagger": "2.0",
     "paths": {
+        "/api": {
+            "post": {
+                "parameters": [
+                    {
+                        "name": "body",
+                        "type": "object",
+                        "in": "body",
+                        "required": true,
+                        "description": null,
+                        "schema": {
+                            "$ref": "#/definitions/ApiRequestDto"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Api"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/ApiResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batch": {
+            "get": {
+                "parameters": [],
+                "tags": [
+                    "Api"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
         "/actuator/health": {
             "get": {
                 "parameters": [],
@@ -25,6 +77,70 @@
         }
     },
     "definitions": {
+        "ApiRequestDto": {
+            "type": "object",
+            "properties": {
+                "environment": {
+                    "type": "object",
+                    "example": null
+                },
+                "host": {
+                    "type": "object",
+                    "example": null
+                },
+                "key": {
+                    "type": "object",
+                    "example": null
+                },
+                "name": {
+                    "type": "object",
+                    "example": null
+                },
+                "type": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "environment",
+                "host",
+                "key",
+                "name",
+                "type"
+            ]
+        },
+        "ApiResponseDto": {
+            "type": "object",
+            "properties": {
+                "environment": {
+                    "type": "object",
+                    "example": null
+                },
+                "host": {
+                    "type": "object",
+                    "example": null
+                },
+                "key": {
+                    "type": "object",
+                    "example": null
+                },
+                "name": {
+                    "type": "object",
+                    "example": null
+                },
+                "type": {
+                    "type": "object",
+                    "example": null
+                }
+            },
+            "required": [
+                "environment",
+                "host",
+                "key",
+                "name",
+                "type"
+            ]
+        },
         "ActuatorHealthResponseDto": {
             "type": "object",
             "properties": {
@@ -40,12 +156,17 @@
     },
     "tags": [
         {
+            "name": "Api",
+            "description": "Api controller. Api controller",
+            "externalDocs": null
+        },
+        {
             "name": "HealthCheck",
             "description": "HealthCheck controller",
             "externalDocs": null
         }
     ],
-    "host": "localhost:5042",
+    "host": "192.168.25.2:5042",
     "schemes": [
         "http"
     ],

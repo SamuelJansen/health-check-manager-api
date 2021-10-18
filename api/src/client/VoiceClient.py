@@ -1,6 +1,7 @@
 import requests
-from python_helper import log
-from python_framework import Client, ClientMethod, HttpStatus
+from python_helper import Constant as c
+from python_helper import log, ObjectHelper, StringHelper
+from python_framework import Client, ClientMethod, HttpStatus, GlobalException
 
 from config import VoiceClientConfig
 
@@ -57,8 +58,10 @@ class VoiceClient :
 
     def getErrorMessage(self, response, exception=None):
         errorMessage = CLIENT_DID_NOT_SENT_ANY_MESSAGE
+        possibleErrorMessage = None
         try :
-            possibleErrorMessage = response.json().get('message', response.json().get('error')).strip()
+            if ObjectHelper.isNotNone(possibleErrorMessage):
+                possibleErrorMessage = response.json().get('message', response.json().get('error')).strip()
             if ObjectHelper.isNotNone(possibleErrorMessage) and StringHelper.isNotBlank(possibleErrorMessage):
                 errorMessage = possibleErrorMessage
             else:

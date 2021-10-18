@@ -21,20 +21,17 @@ api:
         port: 5000
         base-url: /health-check-manager-api
     scheduler:
-        enable: True
+        enable: ${SCHEDULER_API_ENABLE:True}
 
 health-check:
     sheduler:
         health-check:
-            time-in-minutes: 2
+            interval-in-minutes: 2
             client:
                 timeout-in-seconds: 2
 
 ai-voice-api:
-    base-url: http://192.168.25.2:5000/riachuelo-automating-api
-
-riachuelo-automating-api:
-    base-url: http://192.168.25.2:5000/riachuelo-automating-api
+    base-url: http://192.168.25.3:5000/ai-voice-api
 
 swagger:
     host: ${api.server.host}:${api.server.port}

@@ -166,7 +166,7 @@
             "externalDocs": null
         }
     ],
-    "host": "192.168.25.2:5042",
+    "host": "192.168.25.3:5042",
     "schemes": [
         "http"
     ],

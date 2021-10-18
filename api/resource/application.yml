@@ -22,15 +22,6 @@ api:
         base-url: /health-check-manager-api
     scheduler:
         enable: True
-    # database:
-        # dialect: ${DATABASE_DIALECT:}
-        # driver: ${DATABASE_DRIVER:}
-        # database: ${DATABASE_NAME:}
-        # username: ${DATABASE_USERNAME:}
-        # password: ${DATABASE_PASSWORD:}
-        # host: ${DATABASE_HOST:}
-        # port: ${DATABASE_PORT:}
-        # schema: ${DATABASE_SCHEMA:}
 
 health-check:
     sheduler:
@@ -39,23 +30,11 @@ health-check:
             client:
                 timeout-in-seconds: 2
 
-speech-api:
+ai-voice-api:
     base-url: http://192.168.25.2:5000/riachuelo-automating-api
 
 riachuelo-automating-api:
     base-url: http://192.168.25.2:5000/riachuelo-automating-api
-
-ngrok-manager-api:
-    base-url: http://192.168.25.2:5041/ngrok-manager-api
-
-idealizar:
-    agenda-api:
-        base-url: https://idealizar.glitch.me/dev-idealizar-agenda-api
-    whats-app:
-        web-api:
-            base-url: http://192.168.25.2:5100/idealizar-whats-app-web-api
-        manager-api:
-            base-url: http://192.168.25.3:5500/idealizar-whats-app-manager-api
 
 swagger:
     host: ${api.server.host}:${api.server.port}

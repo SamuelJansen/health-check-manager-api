@@ -11,14 +11,6 @@ api:
         dialect: ${DATABASE_DIALECT:sqlite}
         settings:
             check_same_thread: False
-        # driver: ${DATABASE_DRIVER:}
-        # database: ${DATABASE_NAME:}
-        # username: ${DATABASE_USERNAME:}
-        # password: ${DATABASE_PASSWORD:}
-        # host: ${DATABASE_HOST:}
-        # port: ${DATABASE_PORT:}
-        # schema: ${DATABASE_SCHEMA:}
-        # url: ${DATABASE_URL:}
 
 swagger:
     host: localhost:${api.server.port}

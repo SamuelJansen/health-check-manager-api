@@ -12,9 +12,9 @@ api:
 health-check:
     sheduler:
         health-check:
-            interval-in-minutes: 10
+            interval-in-minutes: 15
             client:
-                timeout-in-seconds: 10
+                timeout-in-seconds: 5
 
 swagger:
-    host: 192.168.25.3:${api.server.port}
+    host: ${SWAGGER_HOST:}:${api.server.port}

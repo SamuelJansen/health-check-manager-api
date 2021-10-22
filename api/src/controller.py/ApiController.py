@@ -16,5 +16,5 @@ class ApiController:
 class ApiBatchController:
 
     @ControllerMethod(url = '/')
-    def get(self, dto):
+    def get(self):
         return self.service.api.findAll(), HttpStatus.CREATED

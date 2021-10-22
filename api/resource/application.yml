@@ -18,7 +18,7 @@ api:
     server:
         scheme: https
         host: 0.0.0.0
-        port: 5000
+        port: 5042
         base-url: /health-check-manager-api
     scheduler:
         enable: ${SCHEDULER_API_ENABLE:True}
@@ -31,10 +31,10 @@ health-check:
                 timeout-in-seconds: 2
 
 ai-voice-api:
-    base-url: http://192.168.25.3:5000/ai-voice-api
+    base-url: http://192.168.25.3:5050/ai-voice-api
 
 swagger:
-    host: ${api.server.host}:${api.server.port}
+    host: ${SWAGGER_HOST:}:${api.server.port}
     schemes: [${api.server.scheme}]
     info:
         title: {api.name}

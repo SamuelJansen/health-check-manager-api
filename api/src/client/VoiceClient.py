@@ -60,13 +60,13 @@ class VoiceClient :
         errorMessage = CLIENT_DID_NOT_SENT_ANY_MESSAGE
         possibleErrorMessage = None
         try :
-            if ObjectHelper.isNotNone(possibleErrorMessage):
+            if ObjectHelper.isNotNone(response):
                 possibleErrorMessage = response.json().get('message', response.json().get('error')).strip()
             if ObjectHelper.isNotNone(possibleErrorMessage) and StringHelper.isNotBlank(possibleErrorMessage):
-                errorMessage = possibleErrorMessage
+                errorMessage = f'{c.DOT_SPACE_CAUSE}{possibleErrorMessage}'
             else:
                 log.prettyPython(self.getErrorMessage, 'Client response', response.json(), logLevel=log.DEBUG)
         except Exception as innerException :
             log.warning(self.getErrorMessage, 'Not possible to get error message from response', exception=innerException)
         exceptionPortion = ERROR_AT_CLIENT_CALL_MESSAGE if ObjectHelper.isNone(exception) or StringHelper.isBlank(exception) else str(exception)
-        return f'{exceptionPortion}{c.DOT_SPACE_CAUSE}{errorMessage}'
+        return f'{exceptionPortion}{c.DOT_SPACE}{errorMessage}'

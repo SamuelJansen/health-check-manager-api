@@ -25,7 +25,7 @@ class VoiceClient :
         ]
         response = None
         try :
-            response = requests.post(SPEECH_URL, headers=BASIC_HEADERS, json=requestDtoList)
+            response = requests.post(SPEECH_URL, headers=BASIC_HEADERS, json=requestDtoList, timeout=VoiceClientConfig.DEFAULT_TIMEOUT_IN_SECONDS)
         except Exception as exception:
             self.raiseException(response, exception)
         self.raiseExceptionIfNeeded(response)

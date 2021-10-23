@@ -31,7 +31,8 @@ health-check:
                 timeout-in-seconds: 2
 
 ai-voice-api:
-    base-url: http://192.168.25.3:5050/ai-voice-api
+    base-url: http://${AI_VOICE_API_HOST:}/ai-voice-api
+    default-timeout-in-seconds: 10
 
 swagger:
     host: ${SWAGGER_HOST:}:${api.server.port}

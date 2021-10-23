@@ -31,7 +31,7 @@ health-check:
                 timeout-in-seconds: 2
 
 ai-voice-api:
-    base-url: http://${AI_VOICE_API_HOST:}/ai-voice-api
+    base-url: ${AI_VOICE_API_HOST:}/ai-voice-api
     default-timeout-in-seconds: 10
 
 swagger:

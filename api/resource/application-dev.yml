@@ -1,6 +1,9 @@
 print-status: False
 
 api:
+    # server:
+    #     scheme: https
+    #     host: data.ai-automation-tools.com
     database:
         dialect: ${DATABASE_DIALECT:sqlite}
         settings:
@@ -16,3 +19,4 @@ health-check:
 swagger:
     schemes: [https]
     host: data.ai-automation-tools.com
+    port: "80"

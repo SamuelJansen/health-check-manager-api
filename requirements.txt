@@ -1,1 +1,1 @@
-python-framework<=0.2.49
+python-framework>=0.2.54

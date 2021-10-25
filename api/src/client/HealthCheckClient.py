@@ -6,8 +6,6 @@ from python_framework import Client, ClientMethod, HttpStatus, GlobalException
 from config import HealthCheckConfig
 
 
-ACTUATOR_HEALTH_URI = '/actuator/health'
-
 BASIC_HEADERS = basicHeaders = {
     'Content-type': 'application/json'
 }
@@ -23,7 +21,7 @@ class HealthCheckClient :
     def checkHealth(self, url) :
         response = None
         try :
-            response = requests.get(f'{url}{ACTUATOR_HEALTH_URI}', headers=BASIC_HEADERS, timeout=HealthCheckConfig.CLIENT_CHECK_REQUEST_TIME_OUT_IN_SECONDS)
+            response = requests.get(url, headers=BASIC_HEADERS, timeout=HealthCheckConfig.CLIENT_CHECK_REQUEST_TIME_OUT_IN_SECONDS)
         except Exception as exception:
             self.raiseException(response, exception)
         self.raiseExceptionIfNeeded(response)

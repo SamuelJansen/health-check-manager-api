@@ -2,7 +2,9 @@ from python_helper import Constant as c
 from python_helper import log, StringHelper
 from python_framework import Service, ServiceMethod, EnumItem
 
-# from enumeration.HealthCheckApiList import HealthCheckApiList
+
+ACTUATOR_HEALTH_URI = '/health'
+
 
 @Service()
 class HealthCheckService :
@@ -13,7 +15,7 @@ class HealthCheckService :
         for api in self.service.api.findAll():
             response = {}
             try:
-                response = self.client.healthCheck.checkHealth(api.host)
+                response = self.client.healthCheck.checkHealth(f'{api.host}{ACTUATOR_HEALTH_URI}')
             except Exception as exception:
                 response = {'status':'DOWN', 'message': exception.message, 'logMessage': exception.logMessage}
                 exceptionMessage = f'{exception.message if exception.status < 500 else exception.logMessage}'

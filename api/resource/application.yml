@@ -35,8 +35,8 @@ ai-voice-api:
     default-timeout-in-seconds: 10
 
 swagger:
-    # schemes: [${api.server.scheme}]
-    # host: ${SWAGGER_HOST:${api.server.host}}:${api.server.port}
+    # schemes: [${api.server.scheme}] ###- bug
+    # host: ${SWAGGER_HOST:${api.server.host}}:${api.server.port} ###- bug
     info:
         title: {api.name}
         version: 0.0.1

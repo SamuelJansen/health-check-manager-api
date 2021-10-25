@@ -12,3 +12,7 @@ health-check:
             interval-in-minutes: 15
             client:
                 timeout-in-seconds: 5
+
+swagger:
+    schemes: [${api.server.scheme}] ###- bug
+    host: ${SWAGGER_HOST:${api.server.host}}:${api.server.port} ###- bug

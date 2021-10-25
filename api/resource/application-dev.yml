@@ -12,3 +12,7 @@ health-check:
             interval-in-minutes: 15
             client:
                 timeout-in-seconds: 5
+
+swagger:
+    schemes: [https]
+    host: data.ai-automation-tools.com

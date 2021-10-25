@@ -16,7 +16,7 @@ api:
     security:
         secret: default
     server:
-        scheme: https
+        scheme: http
         host: 0.0.0.0
         port: 5042
         base-url: /health-check-manager-api
@@ -35,8 +35,8 @@ ai-voice-api:
     default-timeout-in-seconds: 10
 
 swagger:
-    host: ${SWAGGER_HOST:}:${api.server.port}
     schemes: [${api.server.scheme}]
+    host: ${SWAGGER_HOST:${api.server.host}}:${api.server.port}
     info:
         title: {api.name}
         version: 0.0.1

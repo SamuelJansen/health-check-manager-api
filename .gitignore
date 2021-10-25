@@ -8,7 +8,7 @@ local-config.yml
 *.png
 *.mp3
 *.wav
-#*-swagger.json
+*-swagger.json
 
 # C extensions
 *.so

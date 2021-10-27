@@ -3,8 +3,6 @@ from python_helper import log, StringHelper
 from python_framework import Service, ServiceMethod, EnumItem
 
 
-ACTUATOR_HEALTH_URI = '/health'
-
 
 @Service()
 class HealthCheckService :
@@ -15,17 +13,15 @@ class HealthCheckService :
         for api in self.service.api.findAll():
             response = {}
             try:
-                response = self.client.healthCheck.checkHealth(f'{api.host}{ACTUATOR_HEALTH_URI}')
+                response = self.client.healthCheck.checkHealth(f'{api.healthUrl}')
             except Exception as exception:
                 response = {'status':'DOWN', 'message': exception.message, 'logMessage': exception.logMessage}
                 exceptionMessage = f'{exception.message if exception.status < 500 else exception.logMessage}'
                 if 120 < len(exceptionMessage):
                     exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-120:]
                     print(exceptionMessage)
-                message = f'{api.name} {api.environment.enumName.lower()} api is down{c.DOT_SPACE_CAUSE}{exceptionMessage}'
-                # print(message)
-                # message = f'{api.name} {api.environment.enumName.lower()} api is down{c.DOT_SPACE_CAUSE}{exception.message}'
+                message = f'{api.name} {api.environment.lower()} api is down{c.DOT_SPACE_CAUSE}{exceptionMessage}'
                 self.service.voice.speakAll([message])
-            reponseDictionary[f'{api.key}{c.COLON}{api.name}{c.COLON}{api.type}'] = response
+            reponseDictionary[f'{api.key}{c.COLON}{api.name}{c.COLON}{api.environment}'] = response
         log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.INFO)
         return reponseDictionary

@@ -28,7 +28,7 @@ health-check:
         health-check:
             interval-in-minutes: 2
             client:
-                timeout-in-seconds: 2
+                timeout-in-seconds: 5
 
 ai-voice-api:
     base-url: ${AI_VOICE_API_HOST:}/ai-voice-api

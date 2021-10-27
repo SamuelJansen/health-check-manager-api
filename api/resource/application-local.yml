@@ -9,9 +9,9 @@ api:
 health-check:
     sheduler:
         health-check:
-            interval-in-minutes: 15
+            interval-in-minutes: 1
             client:
-                timeout-in-seconds: 5
+                timeout-in-seconds: 3
 
 swagger:
     schemes: [${api.server.scheme}] ###- bug

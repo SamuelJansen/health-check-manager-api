@@ -34,29 +34,20 @@ class ApiRepository:
         if self.existsByKey(key) :
             return self.repository.findByKeyAndCommit(key, self.model)
 
-    def existsByName(self, name) :
-        exists = self.repository.session.query(sap.exists().where(self.model.name == name)).one()[0]
-        self.repository.session.commit()
-        return exists
+    def findByEnvironmentKey(self, environmentKey) :
+        if self.existsByEnvironmentKey(environmentKey) :
+            model = self.repository.session.query(self.model).filter(self.model.environmentKey == environmentKey).order_by(self.model.id.desc()).first()
+            self.repository.session.commit()
+            return model
 
     def findByName(self, name) :
         if self.existsByName(name) :
-            model = self.repository.session.query(self.model).filter(self.model.name == name).order_by(self.model.createdAt.desc()).first()
+            model = self.repository.session.query(self.model).filter(self.model.name == name).order_by(self.model.id.desc()).first()
             self.repository.session.commit()
             return model
 
     def notExistsById(self, id) :
         return not self.existsById(id)
-
-    def existsByKeyIn(self, keyList) :
-        condition = sap.or_(False, False)
-        for key in keyList:
-            condition = sap.or_(
-                self.model.key == key
-            )
-        exists = self.repository.session.query(sap.exists().where(condition)).one()[0]
-        self.repository.session.commit()
-        return exists
 
     def save(self, model) :
         return self.repository.saveAndCommit(model)
@@ -87,7 +78,80 @@ class ApiRepository:
         self.repository.session.commit()
         return model
 
-    def findMostRecentActivity(self) :
-        model = self.repository.session.query(self.model).order_by(self.model.id.desc()).first()
+    def findAllByKey(self, key):
+        modelList = self.repository.session.query(self.model).filter(self.model.key == key).all()
         self.repository.session.commit()
-        return model
+        return modelList
+
+    def findAllByEnvironment(self, environment):
+        modelList = self.repository.session.query(self.model).filter(self.model.environment == environment).all()
+        self.repository.session.commit()
+        return modelList
+
+    def findAllByKeyAndEnvironment(self, key, environment):
+        modelList = self.repository.session.query(self.model).filter(
+            sap.and_(
+                self.model.key == key,
+                self.model.environment == environment
+            )
+        ).all()
+        self.repository.session.commit()
+        return modelList
+
+    def findAllByQuery(self, query):
+        return self.repository.findAllByQueryAndCommit(query, self.model)
+
+    def findByKeyAndEnvironment(self, key, environment):
+        modelList = self.repository.session.query(self.model).filter(
+            sap.and_(
+                self.model.key == key,
+                self.model.environment == environment
+            )
+        ).order_by(self.model.id.desc()).first()
+        self.repository.session.commit()
+        return modelList
+
+    def existsByEnvironmentKey(self, environmentKey) :
+        exists = self.repository.session.query(sap.exists().where(self.model.environmentKey == environmentKey)).one()[0]
+        self.repository.session.commit()
+        return exists
+
+    def existsByName(self, name) :
+        exists = self.repository.session.query(sap.exists().where(self.model.name == name)).one()[0]
+        self.repository.session.commit()
+        return exists
+
+    def existsByEnvironment(self, environment):
+        exists = self.repository.session.query(sap.exists().where(self.model.environment == environment)).one()[0]
+        self.repository.session.commit()
+        return exists
+
+    def existsByKeyAndEnvironment(self, key, environment):
+        exists = self.repository.session.query(sap.exists().where(
+            sap.and_(
+                self.model.key == key,
+                self.model.environment == environment
+            )
+        )).one()[0]
+        self.repository.session.commit()
+        return exists
+
+    def existsByEnvironmentKeyIn(self, environmentKeyList) :
+        existenceCondition = sap.or_(False, False)
+        for environmentKey in environmentKeyList:
+            existenceCondition = sap.or_(
+                self.model.environmentKey == environmentKey
+            )
+        exists = self.repository.session.query(sap.exists().where(existenceCondition)).one()[0]
+        self.repository.session.commit()
+        return exists
+
+    def existsByKeyIn(self, keyList) :
+        condition = sap.or_(False, False)
+        for key in keyList:
+            condition = sap.or_(
+                self.model.key == key
+            )
+        exists = self.repository.session.query(sap.exists().where(condition)).one()[0]
+        self.repository.session.commit()
+        return exists

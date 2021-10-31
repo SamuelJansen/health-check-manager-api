@@ -2,19 +2,12 @@ from python_framework import Controller, ControllerMethod, HttpStatus
 
 from dto import ApiDto
 
-@Controller(url = '/api', tag='Api', description='Api controller')
-class ApiController:
-
-    @ControllerMethod(url = '/',
-        requestClass = [ApiDto.ApiRequestDto],
-        responseClass = [ApiDto.ApiResponseDto]
-    )
-    def post(self, dto):
-        return self.service.api.create(dto), HttpStatus.CREATED
-
-@Controller(url = '/api/batch', tag='Api', description='Api controller')
+@Controller(url = '/apis/all', tag='Api', description='Api controller')
 class ApiBatchController:
 
-    @ControllerMethod(url = '/')
-    def get(self):
-        return self.service.api.findAll(), HttpStatus.CREATED
+    @ControllerMethod(
+        requestParamClass = [ApiDto.ApiRequestParamDto],
+        responseClass = [[ApiDto.ApiResponseDto]]
+    )
+    def get(self, params=None):
+        return self.service.api.findAllByQuery(params), HttpStatus.OK

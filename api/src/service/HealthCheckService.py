@@ -23,5 +23,5 @@ class HealthCheckService :
                 message = f'{api.name} {api.environment.lower()} api is down{c.DOT_SPACE_CAUSE}{exceptionMessage}'
                 self.service.voice.speakAll([message])
             reponseDictionary[f'{api.key}{c.COLON}{api.name}{c.COLON}{api.environment}'] = response
-        log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.INFO)
+        log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.STATUS)
         return reponseDictionary

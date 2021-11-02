@@ -7,9 +7,9 @@ class VoiceService :
 
     @ServiceMethod(requestClass=[[str]])
     def speakAll(self, textList) :
-        response = None
+        serviceReturn = None
         try:
-            response = elf.client.voice.speakAll(textList)
+            serviceReturn = self.client.voice.speakAll(textList)
         except Exception as exception:
-            log.failure(self.speakAll, 'Not possible to speack all', exception=exception, muteStackTrace=True)
-        return response
+            log.warning(self.speakAll, 'Not possible to speak all', exception=exception, muteStackTrace=True)
+        return serviceReturn

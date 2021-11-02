@@ -3,7 +3,6 @@ from python_helper import log, StringHelper
 from python_framework import Service, ServiceMethod, EnumItem
 
 
-
 @Service()
 class HealthCheckService :
 
@@ -19,9 +18,8 @@ class HealthCheckService :
                 exceptionMessage = f'{exception.message if exception.status < 500 else exception.logMessage}'
                 if 120 < len(exceptionMessage):
                     exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-120:]
-                    print(exceptionMessage)
                 message = f'{api.name} {api.environment.lower()} api is down{c.DOT_SPACE_CAUSE}{exceptionMessage}'
                 self.service.voice.speakAll([message])
-            reponseDictionary[f'{api.key}{c.COLON}{api.name}{c.COLON}{api.environment}'] = response
+            reponseDictionary[f'{api.environment}{c.COLON}{api.key}{c.COLON}{api.name}'] = response
         log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.STATUS)
         return reponseDictionary

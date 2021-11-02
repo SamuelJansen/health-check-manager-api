@@ -21,7 +21,7 @@ api:
         port: 5042
         base-url: /health-check-manager-api
     scheduler:
-        enable: ${SCHEDULER_API_ENABLE:True}
+        enable: ${ENABLE_SCHEDULER_API:True}
         mute-logs: False
 
 health-check:

@@ -14,7 +14,7 @@ health-check:
         health-check:
             interval-in-minutes: 15
             client:
-                timeout-in-seconds: 10
+                timeout-in-seconds: 5
 
 swagger:
     schemes: [https]

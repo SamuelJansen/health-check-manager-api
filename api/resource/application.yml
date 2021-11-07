@@ -21,6 +21,7 @@ api:
         port: 5042
         base-url: /health-check-manager-api
     scheduler:
+        time-zone: ${SCHEDULER_TIMEZONE:Brazil/East}
         enable: ${ENABLE_SCHEDULER_API:True}
         mute-logs: False
 

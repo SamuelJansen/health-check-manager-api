@@ -3,6 +3,9 @@ from python_helper import log, StringHelper
 from python_framework import Service, ServiceMethod, EnumItem, GlobalException, HttpStatus
 
 
+MAXIMUM_MESSAGE_SIZE = 120
+
+
 @Service()
 class HealthCheckService :
 
@@ -24,9 +27,9 @@ class HealthCheckService :
                     'logMessage': globalException.logMessage
                 }
                 responseStatus = globalException.status
-                exceptionMessage = f'{globalException.message if responseStatus < 500 else globalException.logMessage}'
-                if 120 < len(exceptionMessage):
-                    exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-120:]
+                exceptionMessage = f'{globalException.message if responseStatus < HttpStatus.INTERNAL_SERVER_ERROR else globalException.logMessage}'
+                if MAXIMUM_MESSAGE_SIZE < len(exceptionMessage):
+                    exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-MAXIMUM_MESSAGE_SIZE:]
                 formatedAdditionalMessage = f'{c.DOT_SPACE_CAUSE}{exceptionMessage}'
             if HttpStatus.BAD_REQUEST <= responseStatus:
                 errorMessages.append(f'{environment.apiName} {environment.name.lower()} environment is down{formatedAdditionalMessage}')

@@ -131,21 +131,23 @@ class EnvironmentRepository:
         return exists
 
     def existsByKeyIn(self, keyList) :
-        condition = sap.or_(False, False)
-        for key in keyList:
-            condition = sap.or_(
-                self.model.key == key
-            )
-        exists = self.repository.session.query(sap.exists().where(condition)).one()[0]
+        # condition = sap.or_(False, False)
+        # for key in keyList:
+        #     condition = sap.or_(
+        #         condition,
+        #         self.model.key == key
+        #     )
+        exists = self.repository.session.query(sap.exists().where(self.model.key.in_(keyList))).one()[0]
         self.repository.session.commit()
         return exists
 
     def existsByApiKeyIn(self, apiKeyList) :
-        condition = sap.or_(False, False)
-        for apiKey in apiKeyList:
-            condition = sap.or_(
-                self.model.apiKey == apiKey
-            )
-        exists = self.repository.session.query(sap.exists().where(condition)).one()[0]
+        # condition = sap.or_(False, False)
+        # for apiKey in apiKeyList:
+        #     condition = sap.or_(
+        #         condition,
+        #         self.model.apiKey == apiKey
+        #     )
+        exists = self.repository.session.query(sap.exists().where(self.model.apiKey.in_(apiKeyList))).one()[0]
         self.repository.session.commit()
         return exists

@@ -55,8 +55,8 @@ class EnvironmentService :
         return self.repository.environment.existsByApiKeyIn(apiKeyList)
 
     @ServiceMethod(requestClass=[[str]])
-    def notExistsByKeyIn(self, keyList):
-        return not self.existsByKeyIn(self, keyList)
+    def notExistsByApiKeyIn(self, keyList):
+        return not self.existsByApiKeyIn(self, keyList)
 
     @ServiceMethod(requestClass=[[str]])
     def existsByKeyIn(self, keyList):

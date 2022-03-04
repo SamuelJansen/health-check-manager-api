@@ -1,6 +1,6 @@
 from python_helper import Constant as c
 from python_helper import log, StringHelper
-from python_framework import Service, ServiceMethod, EnumItem, GlobalException
+from python_framework import Service, ServiceMethod, EnumItem, GlobalException, HttpStatus
 
 
 @Service()
@@ -12,7 +12,8 @@ class HealthCheckService :
         reponseDictionary = {}
         for environment in self.service.environment.findAll():
             response = {}
-            responseStatus = 500
+            responseStatus = HttpStatus.INTERNAL_SERVER_ERROR
+            formatedAdditionalMessage = f'{c.BLANK}'
             try:
                 response, responseHeader, responseStatus = self.client.healthCheck.checkHealth(f'{environment.healthUrl}')
             except GlobalException as globalException:
@@ -26,7 +27,9 @@ class HealthCheckService :
                 exceptionMessage = f'{globalException.message if responseStatus < 500 else globalException.logMessage}'
                 if 120 < len(exceptionMessage):
                     exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-120:]
-                errorMessages.append(f'{environment.apiName} {environment.name.lower()} environment is down{c.DOT_SPACE_CAUSE}{exceptionMessage}')
+                formatedAdditionalMessage = f'{c.DOT_SPACE_CAUSE}{exceptionMessage}'
+            if HttpStatus.BAD_REQUEST <= responseStatus:
+                errorMessages.append(f'{environment.apiName} {environment.name.lower()} environment is down{formatedAdditionalMessage}')
             reponseDictionary[f'{environment.name}{c.COLON}{environment.apiKey}{c.COLON}{environment.apiName}'] = {
                 'response': response,
                 'status': responseStatus

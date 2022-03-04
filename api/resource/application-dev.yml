@@ -18,5 +18,5 @@ health-check:
 
 swagger:
     schemes: [https]
-    host: data.ai-automation-tools.com
+    host: ${SWAGGER_HOST:localhost}
     port: "80"

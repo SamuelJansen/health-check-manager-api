@@ -1,35 +1,35 @@
 from python_framework import Controller, ControllerMethod, HttpStatus
 
-from dto import ApiDto
+from dto import EnvironmentDto
 
-@Controller(url = '/environments', tag='Environment', description='Environment controller')
+@Controller(url = '/apis/environments', tag='Environment', description='Environment controller')
 class EnvironmentController:
 
-    @ControllerMethod(url = '/<string:environmentKey>',
-        responseClass = [ApiDto.ApiResponseDto]
+    @ControllerMethod(url = '/<string:key>',
+        responseClass = [EnvironmentDto.EnvironmentResponseDto]
     )
-    def get(self, environmentKey):
-        return self.service.api.findByEnvironmentKey(environmentKey), HttpStatus.OK
+    def get(self, key=None):
+        return self.service.environment.findByKey(key), HttpStatus.OK
 
     @ControllerMethod(url = '/',
-        requestClass = [ApiDto.ApiRequestDto],
-        responseClass = [ApiDto.ApiResponseDto]
+        requestClass = [EnvironmentDto.EnvironmentRequestDto],
+        responseClass = [EnvironmentDto.EnvironmentResponseDto]
     )
     def post(self, dto):
-        return self.service.api.create(dto), HttpStatus.CREATED
+        return self.service.environment.create(dto), HttpStatus.CREATED
 
-@Controller(url = '/environments', tag='Environment', description='Api controller')
+@Controller(url = '/apis/environments', tag='Environment', description='Environment controller')
 class EnvironmentBatchController:
 
     @ControllerMethod(url = '/all',
-        responseClass = [[ApiDto.ApiResponseDto]]
+        responseClass = [[EnvironmentDto.EnvironmentResponseDto]]
     )
     def get(self):
-        return self.service.api.findAll(), HttpStatus.OK
+        return self.service.environment.findAll(), HttpStatus.OK
 
     @ControllerMethod(url = '/all',
-        requestClass = [[ApiDto.ApiRequestDto]],
-        responseClass = [[ApiDto.ApiResponseDto]]
+        requestClass = [[EnvironmentDto.EnvironmentRequestDto]],
+        responseClass = [[EnvironmentDto.EnvironmentResponseDto]]
     )
     def post(self, dtoList):
-        return self.service.api.createAll(dtoList), HttpStatus.CREATED
+        return self.service.environment.createAll(dtoList), HttpStatus.CREATED

@@ -13,8 +13,12 @@ api:
         url: https://github.com/SamuelJansen/
         extension: git
 
+    session:
+        secret: ${SESSION_SECRET:default}
+    api-key:
+        secret: ${API_KEY_SECRET:default}
     security:
-        secret: default
+        secret: ${SECURITY_SECRET:default}
     server:
         scheme: http
         host: 0.0.0.0
@@ -33,7 +37,8 @@ health-check:
                 timeout-in-seconds: 5
 
 ai-voice-api:
-    base-url: ${AI_VOICE_API_HOST:}/ai-voice-api
+    base-url: ${AI_VOICE_API_HOST:}/voice-api
+    api-key: ${AI_VOICE_API_API_KEY:}
     default-timeout-in-seconds: 10
 
 swagger:

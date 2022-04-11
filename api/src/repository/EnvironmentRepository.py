@@ -77,6 +77,11 @@ class EnvironmentRepository:
         self.repository.session.commit()
         return modelList
 
+    def findAllByKeyIn(self, keyList):
+        modelList = self.repository.session.query(self.model).filter(self.model.key.in_(keyList)).all()
+        self.repository.session.commit()
+        return modelList
+
     def findAllByApiKey(self, apiKey):
         modelList = self.repository.session.query(self.model).filter(self.model.apiKey == apiKey).all()
         self.repository.session.commit()

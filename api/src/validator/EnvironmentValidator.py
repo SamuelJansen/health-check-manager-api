@@ -9,10 +9,18 @@ from model import Environment
 class EnvironmentValidator:
 
     @ValidatorMethod(requestClass=[[EnvironmentDto.EnvironmentRequestDto]])
+    def validateUpdateRequestDtoList(self, dtoList):
+        for dto in dtoList:
+            if self.service.environment.notExistsByApiKeyAndName(dto.apiKey, dto.name):
+                raise GlobalException(message=f'Api with key "{dto.apiKey}" and environment "{dto.name}" does not exists', status=HttpStatus.BAD_REQUEST)
+        if self.service.environment.notExistsByKeyIn([dto.key for dto in dtoList]):
+            raise GlobalException(message=f'Some Environments does not exists. Environment keys: {[dto.key for dto in dtoList]}', status=HttpStatus.BAD_REQUEST)
+
+    @ValidatorMethod(requestClass=[[EnvironmentDto.EnvironmentRequestDto]])
     def validateCreateRequestDtoList(self, dtoList):
         for dto in dtoList:
             if self.service.environment.existsByApiKeyAndName(dto.apiKey, dto.name):
-                raise GlobalException(message=f'Api with key: {dto.apiKey} and environment: {dto.name} already exists', status=HttpStatus.BAD_REQUEST)
+                raise GlobalException(message=f'Api with key "{dto.apiKey}" and environment "{dto.name}" already exists', status=HttpStatus.BAD_REQUEST)
         if self.service.environment.existsByKeyIn([dto.key for dto in dtoList]):
             raise GlobalException(message=f'Some Environments already exists. Environment keys: {[dto.key for dto in dtoList]}', status=HttpStatus.BAD_REQUEST)
 

@@ -9,10 +9,22 @@ from model import Environment
 class EnvironmentService :
 
     @ServiceMethod(requestClass=[[EnvironmentDto.EnvironmentRequestDto]])
+    def updateAll(self, dtoList) :
+        self.validator.environment.validateCreateRequestDtoList(dtoList)
+        modelList = self.mapper.environment.fromRequestDtoListToModelList(dtoList)
+        toOverrideModelList = self.repository.findAllByKeyIn([m.key for m in modelList])
+        self.persistAll(modelList)
+        return self.mapper.environment.fromModelListToResponseDtoList(modelList)
+
+    @ServiceMethod(requestClass=[EnvironmentDto.EnvironmentRequestDto])
+    def update(self, dto):
+        return self.updateAll([dto]).pop()
+
+    @ServiceMethod(requestClass=[[EnvironmentDto.EnvironmentRequestDto]])
     def createAll(self, dtoList) :
         self.validator.environment.validateCreateRequestDtoList(dtoList)
         modelList = self.mapper.environment.fromRequestDtoListToModelList(dtoList)
-        self.repository.environment.saveAll(modelList)
+        self.persistAll(modelList)
         return self.mapper.environment.fromModelListToResponseDtoList(modelList)
 
     @ServiceMethod(requestClass=[EnvironmentDto.EnvironmentRequestDto])
@@ -71,5 +83,13 @@ class EnvironmentService :
         return self.repository.environment.existsByKey(key)
 
     @ServiceMethod(requestClass=[str, str])
+    def notExistsByApiKeyAndName(self, apiKey, name):
+        return not self.existsByApiKeyAndName(apiKey, name)
+
+    @ServiceMethod(requestClass=[str, str])
     def existsByApiKeyAndName(self, apiKey, name):
         return self.repository.environment.existsByApiKeyAndName(apiKey, name)
+
+    @ServiceMethod(requestClass=[[Environment.Environment]])
+    def persistAll(self, modelList):
+        self.repository.environment.saveAll(modelList)

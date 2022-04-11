@@ -18,8 +18,16 @@ class EnvironmentController:
     def post(self, dto):
         return self.service.environment.create(dto), HttpStatus.CREATED
 
+    @ControllerMethod(url = '/',
+        requestClass = [EnvironmentDto.EnvironmentRequestDto],
+        responseClass = [EnvironmentDto.EnvironmentResponseDto]
+    )
+    def put(self, dto):
+        return self.service.environment.update(dto), HttpStatus.OK
+
+
 @Controller(url = '/apis/environments', tag='Environment', description='Environment controller')
-class EnvironmentBatchController:
+class EnvironmentAllController:
 
     @ControllerMethod(url = '/all',
         responseClass = [[EnvironmentDto.EnvironmentResponseDto]]
@@ -33,3 +41,10 @@ class EnvironmentBatchController:
     )
     def post(self, dtoList):
         return self.service.environment.createAll(dtoList), HttpStatus.CREATED
+
+    @ControllerMethod(url = '/all',
+        requestClass = [[EnvironmentDto.EnvironmentRequestDto]],
+        responseClass = [[EnvironmentDto.EnvironmentResponseDto]]
+    )
+    def put(self, dtoList):
+        return self.service.environment.updateAll(dtoList), HttpStatus.OK

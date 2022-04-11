@@ -8,11 +8,15 @@ from model import Environment
 @Service()
 class EnvironmentService :
 
+    @ServiceMethod(requestClass=[[str]])
+    def deleteAllByKeyIn(self, keyList):
+        modelList = self.repository.environment.deleteAllByKeyIn(keyList)
+
     @ServiceMethod(requestClass=[[EnvironmentDto.EnvironmentRequestDto]])
     def updateAll(self, dtoList) :
-        self.validator.environment.validateCreateRequestDtoList(dtoList)
-        modelList = self.mapper.environment.fromRequestDtoListToModelList(dtoList)
-        toOverrideModelList = self.repository.findAllByKeyIn([m.key for m in modelList])
+        self.validator.environment.validateUpdateRequestDtoList(dtoList)
+        modelList = self.findAllModelByKeyIn([dto.key for dto in dtoList])
+        self.mapper.environment.overrideModelList(modelList, dtoList)
         self.persistAll(modelList)
         return self.mapper.environment.fromModelListToResponseDtoList(modelList)
 
@@ -40,6 +44,10 @@ class EnvironmentService :
         model = self.repository.environment.findByKey(key)
         self.validator.environment.validateIsFound(model, key)
         return self.mapper.environment.fromModelToResponseDto()
+
+    @ServiceMethod(requestClass=[[str]])
+    def findAllModelByKeyIn(self, keyList) :
+        return self.repository.environment.findAllByKeyIn(keyList)
 
     @ServiceMethod(requestClass=[str])
     def findAllByApiKey(self, apiKey) :
@@ -75,8 +83,8 @@ class EnvironmentService :
         return self.repository.environment.existsByKeyIn(keyList)
 
     @ServiceMethod(requestClass=[[str]])
-    def notExistsByKeyIn(self, apiKeyList):
-        return not self.existsByKeyIn(self, apiKeyList)
+    def notExistsByKeyIn(self, keyList):
+        return not self.existsByKeyIn(keyList)
 
     @ServiceMethod(requestClass=[str])
     def existsByKey(self, key):

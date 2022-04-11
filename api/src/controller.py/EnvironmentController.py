@@ -48,3 +48,9 @@ class EnvironmentAllController:
     )
     def put(self, dtoList):
         return self.service.environment.updateAll(dtoList), HttpStatus.OK
+
+    @ControllerMethod(url = '/all',
+        requestClass = [[str]]
+    )
+    def delete(self, keyList):
+        return self.service.environment.deleteAllByKeyIn(keyList), HttpStatus.NO_CONTENT

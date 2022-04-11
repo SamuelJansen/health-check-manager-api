@@ -82,6 +82,9 @@ class EnvironmentRepository:
         self.repository.session.commit()
         return modelList
 
+    def deleteAllByKeyIn(self, keyList):
+        self.repository.session.query(self.model).filter(self.model.key.in_(keyList)).delete()
+
     def findAllByApiKey(self, apiKey):
         modelList = self.repository.session.query(self.model).filter(self.model.apiKey == apiKey).all()
         self.repository.session.commit()
@@ -92,10 +95,10 @@ class EnvironmentRepository:
         self.repository.session.commit()
         return modelList
 
-    def findAllByApiKeyAndName(self, key, name):
+    def findAllByApiKeyAndName(self, apiKey, name):
         modelList = self.repository.session.query(self.model).filter(
             sap.and_(
-                self.model.key == key,
+                self.model.apiKey == apiKey,
                 self.model.name == name
             )
         ).all()
@@ -105,10 +108,10 @@ class EnvironmentRepository:
     def findAllByQuery(self, query):
         return self.repository.findAllByQueryAndCommit({k:v for k,v in query.items() if ObjectHelper.isNotNone(v)}, self.model)
 
-    def findByApiKeyAndName(self, key, name):
+    def findByApiKeyAndName(self, apiKey, name):
         modelList = self.repository.session.query(self.model).filter(
             sap.and_(
-                self.model.key == key,
+                self.model.ApiKey == apiKey,
                 self.model.name == name
             )
         ).order_by(self.model.id.desc()).first()
@@ -125,10 +128,10 @@ class EnvironmentRepository:
         self.repository.session.commit()
         return exists
 
-    def existsByApiKeyAndName(self, key, name):
+    def existsByApiKeyAndName(self, apiKey, name):
         exists = self.repository.session.query(sap.exists().where(
             sap.and_(
-                self.model.key == key,
+                self.model.apiKey == apiKey,
                 self.model.name == name
             )
         )).one()[0]

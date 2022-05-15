@@ -9,5 +9,5 @@ class StatusAllController:
     @ControllerMethod(url = '/all',
         responseClass = [dict]
     )
-    def post(self):
+    def get(self):
         return self.service.healthCheck.checkAll(), HttpStatus.ACCEPTED

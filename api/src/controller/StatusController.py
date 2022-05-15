@@ -10,4 +10,4 @@ class StatusAllController:
         responseClass = [dict]
     )
     def get(self):
-        return self.service.healthCheck.checkAll(), HttpStatus.ACCEPTED
+        return self.service.healthCheck.checkAll(), HttpStatus.OK

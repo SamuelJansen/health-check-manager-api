@@ -24,7 +24,7 @@ class HealthCheckService :
                 }
                 responseHeader = {}
                 responseStatus = globalException.status
-                self.notificateError(environment, globalException)
+                self.notifyError(environment, globalException)
             reponseDictionary[self.helper.healthCheck.getEnvironmentResponseKey(environment)] = {
                 'response': response,
                 'status': responseStatus
@@ -34,5 +34,5 @@ class HealthCheckService :
 
 
     @ServiceMethod(requestClass=[EnumItem, GlobalException])
-    def notificateError(self, environment, globalException):
+    def notifyError(self, environment, globalException):
         self.service.voice.speak(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException))

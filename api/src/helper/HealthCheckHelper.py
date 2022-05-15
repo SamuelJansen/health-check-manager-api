@@ -22,7 +22,7 @@ class HealthCheckHelper:
                 HttpStatus.BAD_GATWAY,
                 HttpStatus.SERVICE_UNAVAILABLE
             ]:
-                exceptionMessage = StringHelper.toTitle(HttpStatus.map(globalException.status).enumName.lower().split(c.UNDERSCORE))
+                exceptionMessage = self.helper.voice.getEnumAsSpeech(HttpStatus.map(globalException.status))
             else:
                 exceptionMessage = globalException.logMessage
             if HealthCheckConstant.MAXIMUM_MESSAGE_SIZE < len(exceptionMessage):

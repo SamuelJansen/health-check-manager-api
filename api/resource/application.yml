@@ -28,6 +28,10 @@ api:
         time-zone: ${SCHEDULER_TIMEZONE:Brazil/East}
         enable: ${ENABLE_SCHEDULER_API:True}
         mute-logs: False
+    listener:
+        enable: ${ENABLE_LISTENER_API:True}
+    emitter:
+        enable: ${ENABLE_EMITER_API:True}
 
 health-check:
     sheduler:
@@ -36,10 +40,13 @@ health-check:
             client:
                 timeout-in-seconds: 5
 
-ai-voice-api:
-    base-url: ${AI_VOICE_API_HOST:}/voice-api
-    api-key: ${AI_VOICE_API_API_KEY:}
-    default-timeout-in-seconds: 10
+queue-manager-api:
+    base-url: ${QUEUE_MANAGER_API_HOST}/queue-manager-api
+    api-key: ${QUEUE_MANAGER_API_API_KEY}
+    api-notifications:
+        queue-key: ${API_NOTIFICATIONS_QUEUE_KEY}
+        emitter:
+            timeout: 2
 
 swagger:
     # schemes: [${api.server.scheme}] ###- bug

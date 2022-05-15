@@ -1,9 +1,6 @@
 from python_helper import Constant as c
 from python_helper import log, StringHelper
-from python_framework import Service, ServiceMethod, EnumItem, GlobalException, HttpStatus
-
-
-MAXIMUM_MESSAGE_SIZE = 120
+from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem
 
 
 @Service()
@@ -11,7 +8,6 @@ class HealthCheckService :
 
     @ServiceMethod()
     def checkAll(self) :
-        errorMessages = []
         reponseDictionary = {}
         for environment in self.service.environment.findAll():
             response = {}
@@ -26,17 +22,17 @@ class HealthCheckService :
                     'message': globalException.message,
                     'logMessage': globalException.logMessage
                 }
+                responseHeader = {}
                 responseStatus = globalException.status
-                exceptionMessage = f'{globalException.message if responseStatus < HttpStatus.INTERNAL_SERVER_ERROR else globalException.logMessage}'
-                if MAXIMUM_MESSAGE_SIZE < len(exceptionMessage):
-                    exceptionMessage = str(StringHelper.join(exceptionMessage.split(c.COLON)[-2:], character=c.BLANK))[-MAXIMUM_MESSAGE_SIZE:]
-                formatedAdditionalMessage = f'{c.DOT_SPACE_CAUSE}{exceptionMessage}'
-            if HttpStatus.BAD_REQUEST <= responseStatus:
-                errorMessages.append(f'{environment.apiName} {environment.name.lower()} environment is down{formatedAdditionalMessage}')
-            reponseDictionary[f'{environment.name}{c.COLON}{environment.apiKey}{c.COLON}{environment.apiName}'] = {
+                self.notificateError(environment, globalException)
+            reponseDictionary[self.helper.healthCheck.getEnvironmentResponseKey(environment)] = {
                 'response': response,
                 'status': responseStatus
             }
-        self.service.voice.speakAll(errorMessages)
         log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.STATUS)
         return reponseDictionary
+
+
+    @ServiceMethod(requestClass=[EnumItem, GlobalException])
+    def notificateError(self, environment, globalException):
+        self.service.voice.speak(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException))

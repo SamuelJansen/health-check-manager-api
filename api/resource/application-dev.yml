@@ -1,9 +1,6 @@
 print-status: False
 
 api:
-    # server:
-    #     scheme: https
-    #     host: data.ai-automation-tools.com
     database:
         dialect: ${DATABASE_DIALECT:sqlite}
         settings:

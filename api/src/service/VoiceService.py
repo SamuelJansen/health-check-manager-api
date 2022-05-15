@@ -3,13 +3,13 @@ from python_framework import Service, ServiceMethod, EnumItem
 
 
 @Service()
-class VoiceService :
+class VoiceService:
 
-    @ServiceMethod(requestClass=[[str]])
-    def speakAll(self, textList) :
+    @ServiceMethod(requestClass=[str])
+    def speak(self, text) :
         serviceReturn = None
         try:
-            serviceReturn = self.client.voice.speakAll(textList)
+            serviceReturn = self.emitter.voice.speakAll([{"text": text}])
         except Exception as exception:
-            log.warning(self.speakAll, 'Not possible to speak all', exception=exception, muteStackTrace=True)
+            log.failure(self.speakAll, 'Not possible to speak all', exception=exception, muteStackTrace=True)
         return serviceReturn

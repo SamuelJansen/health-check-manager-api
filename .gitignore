@@ -10,6 +10,8 @@ local-config.yml
 *.wav
 *-swagger.json
 example*.txt
+*examples.*
+*example.*
 
 # C extensions
 *.so

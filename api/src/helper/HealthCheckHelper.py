@@ -1,5 +1,7 @@
+import requests
+
 from python_helper import Constant as c
-from python_helper import log, StringHelper
+from python_helper import log, StringHelper, ObjectHelper
 from python_framework import Helper, HelperMethod, EnumItem, GlobalException, HttpStatus, EnumItem
 
 from constant import HealthCheckConstant
@@ -8,21 +10,23 @@ from constant import HealthCheckConstant
 @Helper()
 class HealthCheckHelper:
 
-        @HelperMethod(requestClass=[EnumItem, GlobalException])
-        def getFormattedErrorMessage(self, environment, globalException):
-            formatedAdditionalMessage = self.getFormattedAdditionalMessage(globalException)
+        @HelperMethod(requestClass=[EnumItem, GlobalException, requests.Response])
+        def getFormattedErrorMessage(self, environment, globalException, clientResponse):
+            formatedAdditionalMessage = self.getFormattedAdditionalMessage(globalException, clientResponse)
             return f'{environment.apiName} {environment.name.lower()} environment is down{formatedAdditionalMessage}'
 
 
-        @HelperMethod(requestClass=[GlobalException])
-        def getFormattedAdditionalMessage(self, globalException):
-            if globalException.status < HttpStatus.INTERNAL_SERVER_ERROR:
+        @HelperMethod(requestClass=[GlobalException, requests.Response])
+        def getFormattedAdditionalMessage(self, globalException, clientResponse):
+            responseStatus = HttpStatus.map(globalException.status if ObjectHelper.isNone(clientResponse) else clientResponse.status_code)
+            if globalException.status == responseStatus and globalException.status < HttpStatus.INTERNAL_SERVER_ERROR.enumValue:
                 exceptionMessage = globalException.message
-            elif globalException.status in [
+            elif responseStatus in [
                 HttpStatus.BAD_GATWAY,
-                HttpStatus.SERVICE_UNAVAILABLE
+                HttpStatus.SERVICE_UNAVAILABLE,
+                HttpStatus.NOT_FOUND
             ]:
-                exceptionMessage = self.helper.voice.getEnumAsSpeech(HttpStatus.map(globalException.status))
+                exceptionMessage = self.helper.voice.getEnumAsSpeech(HttpStatus.map(responseStatus))
             else:
                 exceptionMessage = globalException.logMessage
             if HealthCheckConstant.MAXIMUM_MESSAGE_SIZE < len(exceptionMessage):

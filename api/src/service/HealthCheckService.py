@@ -1,6 +1,8 @@
+import requests
+
 from python_helper import Constant as c
-from python_helper import log, StringHelper
-from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem
+from python_helper import log, StringHelper, ObjectHelper
+from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem, HttpDomain, FlaskUtil
 
 
 @Service()
@@ -16,15 +18,15 @@ class HealthCheckService :
             try:
                 response, responseHeader, responseStatus = self.client.healthCheck.checkHealth(f'{environment.healthUrl}')
             except GlobalException as globalException:
+                clientResponse = globalException.logPayload.get(HttpDomain.RESPONSE_BODY_KEY, {}).get(FlaskUtil.CLIENT_RESPONSE)
                 log.log(self.checkAll, 'Not possible to check environment', exception=globalException, muteStackTrace=True)
                 response = {
                     'status':'DOWN',
                     'message': globalException.message,
-                    'logMessage': globalException.logMessage
+                    'logMessage': globalException.logMessage,
+                    'debug': c.BLANK if ObjectHelper.isNone(clientResponse) else clientResponse.text
                 }
-                responseHeader = {}
-                responseStatus = globalException.status
-                self.notifyError(environment, globalException)
+                self.notifyError(environment, globalException, clientResponse)
             reponseDictionary[self.helper.healthCheck.getEnvironmentResponseKey(environment)] = {
                 'response': response,
                 'status': responseStatus
@@ -33,6 +35,6 @@ class HealthCheckService :
         return reponseDictionary
 
 
-    @ServiceMethod(requestClass=[EnumItem, GlobalException])
-    def notifyError(self, environment, globalException):
-        self.service.voice.speak(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException))
+    @ServiceMethod(requestClass=[EnumItem, GlobalException, requests.Response])
+    def notifyError(self, environment, globalException, clientResponse):
+        self.service.voice.speak(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))

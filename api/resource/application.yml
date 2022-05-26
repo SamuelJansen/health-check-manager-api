@@ -40,6 +40,9 @@ health-check:
             client:
                 timeout-in-seconds: 5
 
+notification-manager-api:
+    api-key: ${NOTIFICATION_MANAGER_API_API_KEY}
+
 queue-manager-api:
     base-url: ${QUEUE_MANAGER_API_HOST}/queue-manager-api
     api-key: ${QUEUE_MANAGER_API_API_KEY}

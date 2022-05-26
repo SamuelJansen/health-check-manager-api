@@ -37,4 +37,4 @@ class HealthCheckService :
 
     @ServiceMethod(requestClass=[EnumItem, GlobalException, requests.Response])
     def notifyError(self, environment, globalException, clientResponse):
-        self.service.voice.speak(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))
+        self.service.notification.notify(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))

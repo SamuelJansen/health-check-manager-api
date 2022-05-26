@@ -24,6 +24,6 @@ class NotificationEmitter :
         return self.emit(
             messageHeaders = {
                 JwtConstant.DEFAULT_JWT_API_KEY_HEADER_NAME: f'Bearer {NotificationConfig.API_KEY}'
-            }
+            },
             body = dtoList
         )

@@ -36,7 +36,7 @@ api:
 health-check:
     sheduler:
         health-check:
-            interval-in-minutes: 2
+            interval-in-minutes: 15
             client:
                 timeout-in-seconds: 5
 

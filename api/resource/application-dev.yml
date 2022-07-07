@@ -6,13 +6,6 @@ api:
         settings:
             check_same_thread: False
 
-health-check:
-    sheduler:
-        health-check:
-            interval-in-minutes: 15
-            client:
-                timeout-in-seconds: 5
-
 swagger:
     schemes: [https]
     host: ${SWAGGER_HOST:localhost}

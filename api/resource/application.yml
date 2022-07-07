@@ -40,9 +40,6 @@ health-check:
             client:
                 timeout-in-seconds: 5
 
-notification-manager-api:
-    api-key: ${NOTIFICATION_MANAGER_API_API_KEY}
-
 queue-manager-api:
     base-url: ${QUEUE_MANAGER_API_HOST}/queue-manager-api
     api-key: ${QUEUE_MANAGER_API_API_KEY}
@@ -50,6 +47,15 @@ queue-manager-api:
         queue-key: ${API_NOTIFICATIONS_QUEUE_KEY}
         emitter:
             timeout: 2
+
+notification-manager-api:
+    api-notifications:
+        queue-key: ${queue-manager-api.api-notifications.queue-key}
+        emitter:
+            api-key: ${queue-manager-api.api-key}
+            notification-api-key: ${NOTIFICATION_MANAGER_API_API_KEY}
+            base-url: ${queue-manager-api.base-url}
+            timeout: ${queue-manager-api.api-notifications.emitter.timeout}
 
 swagger:
     # schemes: [${api.server.scheme}] ###- bug

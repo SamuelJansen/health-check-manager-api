@@ -19,7 +19,7 @@ class HealthCheckService :
                 response, responseHeader, responseStatus = self.client.healthCheck.checkHealth(f'{environment.healthUrl}')
             except GlobalException as globalException:
                 clientResponse = globalException.logPayload.get(HttpDomain.RESPONSE_BODY_KEY, {}).get(FlaskUtil.CLIENT_RESPONSE)
-                log.log(self.checkAll, 'Not possible to check environment', exception=globalException, muteStackTrace=True)
+                log.failure(self.checkAll, 'Not possible to check environment', exception=globalException, muteStackTrace=True)
                 response = {
                     'status':'DOWN',
                     'message': globalException.message,
@@ -37,4 +37,4 @@ class HealthCheckService :
 
     @ServiceMethod(requestClass=[EnumItem, GlobalException, requests.Response])
     def notifyError(self, environment, globalException, clientResponse):
-        self.service.notification.notify(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))
+        self.service.notification.notifyError(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))

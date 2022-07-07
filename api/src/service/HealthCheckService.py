@@ -3,6 +3,7 @@ import requests
 from python_helper import Constant as c
 from python_helper import log, StringHelper, ObjectHelper
 from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem, HttpDomain, FlaskUtil
+from notification_manager_api import NotificationDestiny
 
 
 @Service()
@@ -37,4 +38,7 @@ class HealthCheckService :
 
     @ServiceMethod(requestClass=[EnumItem, GlobalException, requests.Response])
     def notifyError(self, environment, globalException, clientResponse):
-        self.service.notification.notifyError(self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse))
+        self.service.notification.notifyErrorTo(
+            self.helper.healthCheck.getFormattedErrorMessage(environment, globalException, clientResponse),
+            [NotificationDestiny.TELEGRAM, NotificationDestiny.VOICE]
+        )

@@ -2,7 +2,7 @@ import requests
 
 from python_helper import Constant as c
 from python_helper import log, StringHelper, ObjectHelper
-from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem, HttpDomain, FlaskUtil
+from python_framework import Service, ServiceMethod, GlobalException, HttpStatus, EnumItem, HttpDomain, FlaskUtil, ActuatorHealthStatus
 from notification_manager_api import NotificationDestiny
 
 
@@ -22,16 +22,17 @@ class HealthCheckService :
                 clientResponse = globalException.logPayload.get(HttpDomain.RESPONSE_BODY_KEY, {}).get(FlaskUtil.CLIENT_RESPONSE)
                 log.failure(self.checkAll, 'Not possible to check environment', exception=globalException, muteStackTrace=True)
                 response = {
-                    'status':'DOWN',
+                    'status': ActuatorHealthStatus.DOWN,
                     'message': globalException.message,
                     'logMessage': globalException.logMessage,
                     'debug': c.BLANK if ObjectHelper.isNone(clientResponse) else clientResponse.text
                 }
-                self.notifyError(environment, globalException, clientResponse)
             reponseDictionary[self.helper.healthCheck.getEnvironmentResponseKey(environment)] = {
                 'response': response,
                 'status': responseStatus
             }
+            if ActuatorHealthStatus.DOWN == response['status']:
+                self.notifyError(environment, 'Aplication is down', 'Internal error')
         log.prettyPython(self.checkAll, 'Apis status', reponseDictionary, logLevel=log.STATUS)
         return reponseDictionary
 

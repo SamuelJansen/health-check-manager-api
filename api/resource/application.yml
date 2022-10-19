@@ -38,7 +38,7 @@ health-check:
         health-check:
             interval-in-minutes: 15
             client:
-                timeout-in-seconds: (5,1)
+                timeout-in-seconds: (3,2)
 
 queue-manager-api:
     base-url: ${QUEUE_MANAGER_API_HOST}/queue-manager-api
